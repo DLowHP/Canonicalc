@@ -2,6 +2,7 @@
 #define CANONICALC_H
 
 #include <QMainWindow>
+#include <QKeyEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Canonicalc; }
@@ -18,6 +19,7 @@ public:
 protected:
     //Overrides QWidget class function that handles window resize event
     virtual void resizeEvent(QResizeEvent *);
+    virtual void keyPressEvent(QKeyEvent *event);
 
 private:
     Ui::Canonicalc *ui;
@@ -44,15 +46,17 @@ private:
 
     /*  */
     void appendValue(double btnValue);
-    void clear();
-    void refresh();
+    void clear(bool clearDisplay = true);
+    void refresh(double value);
     void calculate();
+    void calculate(double firstValue, double secondValue, Operation op);
 
     /* HISTORY */
     QString latestEntry;
     QString latestHistory;
 
     void saveHistory();
+    void clearHistory();
 
 private slots:
     void on_btnClear_clicked();
@@ -76,5 +80,7 @@ private slots:
     void on_btn8_clicked();
     void on_btn9_clicked();
     void on_btnHistory_clicked();
+    void on_fixedHistoryClear_clicked();
+    void on_historyClear_clicked();
 };
 #endif // CANONICALC_H

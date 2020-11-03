@@ -29,6 +29,12 @@ public:
     QWidget *centralwidget;
     QGridLayout *mainLayout;
     QGridLayout *mainWrapper;
+    QLabel *fixedHistoryLabel;
+    QPushButton *btnHistory;
+    QVBoxLayout *displayWrapper;
+    QTextBrowser *latestCalculation;
+    QLabel *display;
+    QTextEdit *fixedHistoryBrowser;
     QWidget *buttons;
     QGridLayout *btnGrid;
     QPushButton *btn3;
@@ -51,12 +57,8 @@ public:
     QPushButton *btn1;
     QPushButton *btnDecimal;
     QPushButton *btnClear;
-    QPushButton *btnHistory;
-    QVBoxLayout *displayWrapper;
-    QTextBrowser *latestCalculation;
-    QLabel *display;
-    QLabel *fixedHistoryLabel;
-    QTextEdit *fixedHistoryBrowser;
+    QPushButton *pushButton;
+    QGridLayout *historyWrapper;
     QTextEdit *historyBrowser;
     QLabel *historyLabel;
     QMenuBar *menubar;
@@ -65,7 +67,7 @@ public:
     {
         if (Canonicalc->objectName().isEmpty())
             Canonicalc->setObjectName(QString::fromUtf8("Canonicalc"));
-        Canonicalc->resize(391, 740);
+        Canonicalc->resize(504, 765);
         Canonicalc->setStyleSheet(QString::fromUtf8("background-color: #404958;"));
         centralwidget = new QWidget(Canonicalc);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
@@ -73,6 +75,85 @@ public:
         mainLayout->setObjectName(QString::fromUtf8("mainLayout"));
         mainWrapper = new QGridLayout();
         mainWrapper->setObjectName(QString::fromUtf8("mainWrapper"));
+        fixedHistoryLabel = new QLabel(centralwidget);
+        fixedHistoryLabel->setObjectName(QString::fromUtf8("fixedHistoryLabel"));
+        fixedHistoryLabel->setEnabled(true);
+        fixedHistoryLabel->setMinimumSize(QSize(0, 45));
+        fixedHistoryLabel->setStyleSheet(QString::fromUtf8("QLabel {\n"
+"	font-size: 16pt;\n"
+"	color: #fafaf6;\n"
+"	qproperty-alignment: 'AlignVCenter | AlignLeft';\n"
+"	border-bottom: 3px solid #17b978;\n"
+"}"));
+
+        mainWrapper->addWidget(fixedHistoryLabel, 4, 0, 1, 1);
+
+        btnHistory = new QPushButton(centralwidget);
+        btnHistory->setObjectName(QString::fromUtf8("btnHistory"));
+        btnHistory->setMinimumSize(QSize(45, 45));
+        btnHistory->setStyleSheet(QString::fromUtf8("/* History button */\n"
+"QPushButton {\n"
+"	border: 0;\n"
+"	padding: 10px;\n"
+"    background-color: #3A4353;\n"
+"    outline: none;\n"
+"    font-size: 18pt;\n"
+"    color: #17b978;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #4a515f;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #5C6576;\n"
+"}"));
+
+        mainWrapper->addWidget(btnHistory, 1, 1, 1, 1);
+
+        displayWrapper = new QVBoxLayout();
+        displayWrapper->setSpacing(0);
+        displayWrapper->setObjectName(QString::fromUtf8("displayWrapper"));
+        displayWrapper->setContentsMargins(1, 1, 1, 1);
+        latestCalculation = new QTextBrowser(centralwidget);
+        latestCalculation->setObjectName(QString::fromUtf8("latestCalculation"));
+        latestCalculation->setMinimumSize(QSize(0, 50));
+        latestCalculation->setStyleSheet(QString::fromUtf8("QTextBrowser {\n"
+"	font-size: 14pt;\n"
+"	color: #717171;\n"
+"	border: 1px solid gray;\n"
+"	border-bottom: none;\n"
+"}"));
+
+        displayWrapper->addWidget(latestCalculation);
+
+        display = new QLabel(centralwidget);
+        display->setObjectName(QString::fromUtf8("display"));
+        display->setMinimumSize(QSize(0, 100));
+        display->setStyleSheet(QString::fromUtf8("QLabel {\n"
+"	font-size: 20pt;\n"
+"	color: #fafaf6;\n"
+"	qproperty-alignment: 'AlignVCenter | AlignRight';\n"
+"	border: 1px solid gray;\n"
+"	border-top: none;\n"
+"}"));
+        display->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse);
+
+        displayWrapper->addWidget(display);
+
+
+        mainWrapper->addLayout(displayWrapper, 2, 0, 1, 2);
+
+        fixedHistoryBrowser = new QTextEdit(centralwidget);
+        fixedHistoryBrowser->setObjectName(QString::fromUtf8("fixedHistoryBrowser"));
+        fixedHistoryBrowser->setStyleSheet(QString::fromUtf8("QTextEdit {\n"
+"	border: 0;\n"
+"    background-color: #3A4353;\n"
+"}"));
+        fixedHistoryBrowser->setReadOnly(true);
+
+        mainWrapper->addWidget(fixedHistoryBrowser, 5, 0, 1, 2);
+
         buttons = new QWidget(centralwidget);
         buttons->setObjectName(QString::fromUtf8("buttons"));
         btnGrid = new QGridLayout(buttons);
@@ -525,17 +606,15 @@ public:
 
         mainWrapper->addWidget(buttons, 3, 0, 1, 2);
 
-        btnHistory = new QPushButton(centralwidget);
-        btnHistory->setObjectName(QString::fromUtf8("btnHistory"));
-        btnHistory->setMinimumSize(QSize(45, 45));
-        btnHistory->setStyleSheet(QString::fromUtf8("/* History button */\n"
-"QPushButton {\n"
+        pushButton = new QPushButton(centralwidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setMinimumSize(QSize(70, 70));
+        pushButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "	border: 0;\n"
-"	padding: 10px;\n"
 "    background-color: #3A4353;\n"
 "    outline: none;\n"
 "    font-size: 18pt;\n"
-"    color: #17b978;\n"
+"    color: #C35B52;\n"
 "}\n"
 "\n"
 "QPushButton:hover {\n"
@@ -546,67 +625,13 @@ public:
 "    background-color: #5C6576;\n"
 "}"));
 
-        mainWrapper->addWidget(btnHistory, 1, 1, 1, 1);
-
-        displayWrapper = new QVBoxLayout();
-        displayWrapper->setSpacing(0);
-        displayWrapper->setObjectName(QString::fromUtf8("displayWrapper"));
-        displayWrapper->setContentsMargins(1, 1, 1, 1);
-        latestCalculation = new QTextBrowser(centralwidget);
-        latestCalculation->setObjectName(QString::fromUtf8("latestCalculation"));
-        latestCalculation->setMinimumSize(QSize(0, 50));
-        latestCalculation->setStyleSheet(QString::fromUtf8("QTextBrowser {\n"
-"	font-size: 14pt;\n"
-"	color: #717171;\n"
-"	border: 1px solid gray;\n"
-"	border-bottom: none;\n"
-"}"));
-
-        displayWrapper->addWidget(latestCalculation);
-
-        display = new QLabel(centralwidget);
-        display->setObjectName(QString::fromUtf8("display"));
-        display->setMinimumSize(QSize(0, 100));
-        display->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"	font-size: 20pt;\n"
-"	color: #fafaf6;\n"
-"	qproperty-alignment: 'AlignVCenter | AlignRight';\n"
-"	border: 1px solid gray;\n"
-"	border-top: none;\n"
-"}"));
-        display->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse);
-
-        displayWrapper->addWidget(display);
-
-
-        mainWrapper->addLayout(displayWrapper, 2, 0, 1, 2);
-
-        fixedHistoryLabel = new QLabel(centralwidget);
-        fixedHistoryLabel->setObjectName(QString::fromUtf8("fixedHistoryLabel"));
-        fixedHistoryLabel->setEnabled(true);
-        fixedHistoryLabel->setMinimumSize(QSize(0, 45));
-        fixedHistoryLabel->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"	font-size: 16pt;\n"
-"	color: #fafaf6;\n"
-"	qproperty-alignment: 'AlignVCenter | AlignLeft';\n"
-"	border-bottom: 3px solid #17b978;\n"
-"}"));
-
-        mainWrapper->addWidget(fixedHistoryLabel, 4, 0, 1, 2);
-
-        fixedHistoryBrowser = new QTextEdit(centralwidget);
-        fixedHistoryBrowser->setObjectName(QString::fromUtf8("fixedHistoryBrowser"));
-        fixedHistoryBrowser->setStyleSheet(QString::fromUtf8("QTextEdit {\n"
-"	border: 0;\n"
-"    background-color: #3A4353;\n"
-"}"));
-        fixedHistoryBrowser->setReadOnly(true);
-
-        mainWrapper->addWidget(fixedHistoryBrowser, 5, 0, 1, 2);
+        mainWrapper->addWidget(pushButton, 4, 1, 1, 1);
 
 
         mainLayout->addLayout(mainWrapper, 0, 0, 3, 1);
 
+        historyWrapper = new QGridLayout();
+        historyWrapper->setObjectName(QString::fromUtf8("historyWrapper"));
         historyBrowser = new QTextEdit(centralwidget);
         historyBrowser->setObjectName(QString::fromUtf8("historyBrowser"));
         historyBrowser->setMaximumSize(QSize(300, 16777215));
@@ -616,7 +641,7 @@ public:
 "}"));
         historyBrowser->setReadOnly(true);
 
-        mainLayout->addWidget(historyBrowser, 1, 1, 1, 1);
+        historyWrapper->addWidget(historyBrowser, 1, 0, 1, 1);
 
         historyLabel = new QLabel(centralwidget);
         historyLabel->setObjectName(QString::fromUtf8("historyLabel"));
@@ -629,12 +654,15 @@ public:
 "	border-bottom: 3px solid #17b978;\n"
 "}"));
 
-        mainLayout->addWidget(historyLabel, 0, 1, 1, 1);
+        historyWrapper->addWidget(historyLabel, 0, 0, 1, 1);
+
+
+        mainLayout->addLayout(historyWrapper, 0, 1, 1, 1);
 
         Canonicalc->setCentralWidget(centralwidget);
         menubar = new QMenuBar(Canonicalc);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 391, 21));
+        menubar->setGeometry(QRect(0, 0, 504, 21));
         Canonicalc->setMenuBar(menubar);
 
         retranslateUi(Canonicalc);
@@ -645,6 +673,14 @@ public:
     void retranslateUi(QMainWindow *Canonicalc)
     {
         Canonicalc->setWindowTitle(QCoreApplication::translate("Canonicalc", "Canonicalc", nullptr));
+        fixedHistoryLabel->setText(QCoreApplication::translate("Canonicalc", "History", nullptr));
+        btnHistory->setText(QCoreApplication::translate("Canonicalc", "History", nullptr));
+        latestCalculation->setHtml(QCoreApplication::translate("Canonicalc", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:14pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"right\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", nullptr));
+        display->setText(QCoreApplication::translate("Canonicalc", "0", nullptr));
         btn3->setText(QCoreApplication::translate("Canonicalc", "3", nullptr));
         btn8->setText(QCoreApplication::translate("Canonicalc", "8", nullptr));
         btnSqrt->setText(QCoreApplication::translate("Canonicalc", "\342\210\232", nullptr));
@@ -665,14 +701,7 @@ public:
         btn1->setText(QCoreApplication::translate("Canonicalc", "1", nullptr));
         btnDecimal->setText(QCoreApplication::translate("Canonicalc", ".", nullptr));
         btnClear->setText(QCoreApplication::translate("Canonicalc", "C", nullptr));
-        btnHistory->setText(QCoreApplication::translate("Canonicalc", "History", nullptr));
-        latestCalculation->setHtml(QCoreApplication::translate("Canonicalc", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:14pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"right\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", nullptr));
-        display->setText(QCoreApplication::translate("Canonicalc", "0", nullptr));
-        fixedHistoryLabel->setText(QCoreApplication::translate("Canonicalc", "History", nullptr));
+        pushButton->setText(QCoreApplication::translate("Canonicalc", "X", nullptr));
         historyLabel->setText(QCoreApplication::translate("Canonicalc", "History", nullptr));
     } // retranslateUi
 
