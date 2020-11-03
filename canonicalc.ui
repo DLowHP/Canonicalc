@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>391</width>
-    <height>738</height>
+    <height>740</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -812,6 +812,25 @@ p, li { white-space: pre-wrap; }
       </item>
      </layout>
     </item>
+    <item row="1" column="1">
+     <widget class="QTextEdit" name="historyBrowser">
+      <property name="maximumSize">
+       <size>
+        <width>300</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTextEdit {
+	border: 0;
+    background-color: #3A4353;
+}</string>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="1">
      <widget class="QLabel" name="historyLabel">
       <property name="enabled">
@@ -836,25 +855,6 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QTextEdit" name="historyBrowser">
-      <property name="maximumSize">
-       <size>
-        <width>300</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QTextEdit {
-	border: 0;
-    background-color: #3A4353;
-}</string>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -863,7 +863,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>391</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

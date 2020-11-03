@@ -22,10 +22,16 @@ protected:
 private:
     Ui::Canonicalc *ui;
 
+    double previousValue = NULL;
+    double currentValue = NULL;
+    double result = NULL;
+
     bool awaitingInput = false;
-    double firstValue = NULL;
-    double secondValue = NULL;
-    void appendValue(double btnValue);
+    bool valueChanged = false;
+    bool valueSaved = false;
+    bool isSqrt = false;
+    bool equalPressed = false;
+
     enum class Operation {
         None,
         Divide,
@@ -33,13 +39,20 @@ private:
         Subtract,
         Add
     };
-    bool isSqrt = false;
+    Operation previousOperation = Operation::None;
     Operation currentOperation = Operation::None;
 
-    /* HISTORY HANDLER */
-    QString latestCalculation;
-    void updateLatestCalculation();
-    void saveLatestCalculation(const QString result);
+    /*  */
+    void appendValue(double btnValue);
+    void clear();
+    void refresh();
+    void calculate();
+
+    /* HISTORY */
+    QString latestEntry;
+    QString latestHistory;
+
+    void saveHistory();
 
 private slots:
     void on_btnClear_clicked();
