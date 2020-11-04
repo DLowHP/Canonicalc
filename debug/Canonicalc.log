@@ -1,0 +1,7 @@
+﻿  Uic'ing canonicalc.ui...
+  Moc'ing canonicalc.h...
+  canonicalc.cpp
+  main.cpp
+C:\dev\QtProjects\Canonicalc\canonicalc.cpp(69,19): warning C4566: character represented by universal-character-name '\u221A' cannot be represented in the current code page (1252)
+  moc_canonicalc.cpp
+  Canonicalc.vcxproj -> C:\dev\QtProjects\Canonicalc\debug\Canonicalc.exe

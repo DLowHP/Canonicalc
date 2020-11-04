@@ -1,0 +1,64 @@
+:root {
+    color: #404958; /* background */
+    color: #3A4353; /* btn */
+    color: #4a515f; /* btn focus */
+    color: #5C6576; /* btn pressed */
+
+    color: #fafaf6; /* font primary */
+    color: #717A87; /* font secondary */
+    color: #C35B52; /* font cancel */
+}
+
+
+/* Numbers */
+QPushButton {
+	border: 0;
+    background-color: #3A4353;
+    outline: none;
+    font-size: 18pt;
+    color: #fafaf6;
+}
+
+QPushButton:hover {
+    background-color: #4a515f;
+}
+
+QPushButton:pressed {
+    background-color: #5C6576;
+}
+
+
+/* Modifiers */
+QPushButton {
+	border: 0;
+    background-color: #3A4353;
+    outline: none;
+    font-size: 18pt;
+    color: #717171;
+}
+
+QPushButton:hover {
+    background-color: #4a515f;
+}
+
+QPushButton:pressed {
+    background-color: #5C6576;
+}
+
+
+/* Cancel */
+QPushButton {
+	border: 0;
+    background-color: #3A4353;
+    outline: none;
+    font-size: 18pt;
+    color: #C35B52;
+}
+
+QPushButton:hover {
+    background-color: #4a515f;
+}
+
+QPushButton:pressed {
+    background-color: #5C6576;
+}
