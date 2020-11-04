@@ -1,2 +1,0 @@
-C:\dev\QtProjects\Canonicalc\debug\Canonicalc.exe
-C:\dev\QtProjects\Canonicalc\debug\Canonicalc.pdb
