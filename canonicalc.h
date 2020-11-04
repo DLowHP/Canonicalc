@@ -44,9 +44,8 @@ private:
     Operation previousOperation = Operation::None;
     Operation currentOperation = Operation::None;
 
-    /*  */
-    void appendValue(double btnValue);
     void clear(bool clearDisplay = true);
+    void appendValue(double btnValue);
     void refresh(double value);
     void calculate();
 
@@ -55,31 +54,25 @@ private:
     QString latestHistory;
 
     void saveHistory();
-    void clearHistory();
+    
 
 private slots:
-    void on_btnClear_clicked();
-    void on_btnBackspace_clicked();
-    void on_btnSqrt_clicked();
-    void on_btnDivide_clicked();
-    void on_btnMultiply_clicked();
-    void on_btnSubtract_clicked();
-    void on_btnAdd_clicked();
-    void on_btnEquals_clicked();
-    void on_btnChangeSign_clicked();
-    void on_btnDecimal_clicked();
-    void on_btn0_clicked();
-    void on_btn1_clicked();
-    void on_btn2_clicked();
-    void on_btn3_clicked();
-    void on_btn4_clicked();
-    void on_btn5_clicked();
-    void on_btn6_clicked();
-    void on_btn7_clicked();
-    void on_btn8_clicked();
-    void on_btn9_clicked();
-    void on_btnHistory_clicked();
-    void on_fixedHistoryClear_clicked();
-    void on_historyClear_clicked();
+    void clearHandler();
+    void backspace();
+
+    void divide();
+    void multiply();
+    void subtract();
+    void add();
+    void equals();
+
+    void decimal();
+    void squareroot();
+    void changeSign();
+
+    void appendValueHandler();
+
+    void showHistory();
+    void clearHistory();
 };
 #endif // CANONICALC_H
