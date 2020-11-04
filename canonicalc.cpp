@@ -1,4 +1,4 @@
-﻿#include "canonicalc.h"
+#include "canonicalc.h"
 #include "ui_canonicalc.h"
 
 #include <QDebug>
@@ -66,7 +66,8 @@ void Canonicalc::on_btnSqrt_clicked()
     if (equalPressed) { clear(0); equalPressed = false; };
 
     isSqrt = true;
-    latestEntry = "√(" + ui->display->text() + ")";
+//Nice ( ͡° ͜ʖ ͡° )
+    latestEntry = "sqrt(" + ui->display->text() + ")";
     latestHistory += latestEntry;
     ui->latestCalculation->setText(latestHistory);
     valueSaved = true;
@@ -83,8 +84,9 @@ void Canonicalc::on_btnDivide_clicked()
     if (equalPressed) { clear(0); equalPressed = false; };
 
     if (valueChanged) {
-        refresh(currentValue);
         calculate();
+        currentOperation = Operation::Divide;
+        refresh(currentValue);
         awaitingInput = true;
         valueChanged = false;
     }
@@ -102,8 +104,9 @@ void Canonicalc::on_btnMultiply_clicked()
     if (equalPressed) { clear(0); equalPressed = false; };
 
     if (valueChanged) {
-        refresh(currentValue);
         calculate();
+        currentOperation = Operation::Multiply;
+        refresh(currentValue);
         awaitingInput = true;
         valueChanged = false;
     }
@@ -121,8 +124,9 @@ void Canonicalc::on_btnSubtract_clicked()
     if (equalPressed) { clear(0); equalPressed = false; };
 
     if (valueChanged) {
-        refresh(currentValue);
         calculate();
+        currentOperation = Operation::Subtract;
+        refresh(currentValue);
         awaitingInput = true;
         valueChanged = false;
     }
@@ -140,8 +144,9 @@ void Canonicalc::on_btnAdd_clicked()
     if (equalPressed) { clear(0); equalPressed = false; };
 
     if (valueChanged) { //Second value
-        refresh(currentValue);
         calculate();
+        currentOperation = Operation::Add;
+        refresh(currentValue);
         awaitingInput = true;
         valueChanged = false;
     }
@@ -228,29 +233,6 @@ void Canonicalc::on_btnEquals_clicked()
 }
 
 
-//Overrided function, handles keyboard clicks.
-void Canonicalc::keyPressEvent(QKeyEvent *event)
-{
-    switch (event->key()) {
-    case Qt::Key::Key_0: appendValue(0); break;
-    case Qt::Key::Key_1: appendValue(1); break;
-    case Qt::Key::Key_2: appendValue(2); break;
-    case Qt::Key::Key_3: appendValue(3); break;
-    case Qt::Key::Key_4: appendValue(4); break;
-    case Qt::Key::Key_5: appendValue(5); break;
-    case Qt::Key::Key_6: appendValue(6); break;
-    case Qt::Key::Key_7: appendValue(7); break;
-    case Qt::Key::Key_8: appendValue(8); break;
-    case Qt::Key::Key_9: appendValue(9); break;
-    case Qt::Key::Key_Backspace:
-        if (equalPressed) { clear(); equalPressed = false; };
-        QString newValue = ui->display->text();
-        newValue.chop(1);
-        ui->display->setText(newValue);
-        currentValue = newValue.toDouble();
-        break;
-    }
-}
 
 //Overrided function, checks if there's enough space for "calc history browser",
 //  if possible, shows calculations history list.
@@ -279,6 +261,7 @@ void Canonicalc::resizeEvent(QResizeEvent*)
     ui->fixedHistoryClear->setHidden(true);
 }
 
+//Clears everything by setting to default values.
 void Canonicalc::clear(bool clearDisplay)
 {
     previousValue = NULL;
@@ -337,10 +320,16 @@ void Canonicalc::appendValue(double btnValue)
     valueSaved = false;
 }
 
+//Refreshes history and changes previousOperation to currentOperation.
 void Canonicalc::refresh(double value)
 {
     if (!valueSaved) { //Save previous value to history.
-        latestEntry = QString::number(value, 'g', 15);
+        if (value < 0) {
+            latestEntry += "(" + QString::number(value, 'g', 15) + ")";
+        }
+        else {
+            latestEntry = QString::number(value, 'g', 15);
+        }
         latestHistory += latestEntry;
         valueSaved = true;
     }
@@ -395,6 +384,7 @@ void Canonicalc::refresh(double value)
     ui->latestCalculation->setText(latestHistory);
 }
 
+//Calculates latest operation.
 void Canonicalc::calculate()
 {
     QString newDisplayValue;
@@ -440,51 +430,6 @@ void Canonicalc::calculate()
     //previousValue = result;
 }
 
-void Canonicalc::calculate(double firstValue, double secondValue, Operation op)
-{
-    QString newDisplayValue;
-
-    currentValue = ui->display->text().toDouble();
-
-    if (result == NULL) {
-        result = firstValue;
-    }
-
-    switch (op) {
-    case Operation::None:
-        result = currentValue;
-        ui->display->setText(QString::number(currentValue));
-        break;
-
-    case Operation::Divide:
-        result /= secondValue;
-        newDisplayValue = QString::number(result, 'g', 15);
-        ui->display->setText(newDisplayValue);
-        break;
-
-    case Operation::Multiply:
-        result *= secondValue;
-        newDisplayValue = QString::number(result, 'g', 15);
-        ui->display->setText(newDisplayValue);
-        break;
-
-    case Operation::Subtract:
-        result -= secondValue;
-        newDisplayValue = QString::number(result, 'g', 15);
-        ui->display->setText(newDisplayValue);
-        break;
-
-    case Operation::Add:
-        result += secondValue;
-        newDisplayValue = QString::number(result, 'g', 15);
-        ui->display->setText(newDisplayValue);
-        break;
-    }
-
-    previousOperation = currentOperation;
-    //previousValue = result;
-}
-
 /* HISTORY */
 void Canonicalc::on_btnHistory_clicked()
 {
@@ -502,10 +447,6 @@ void Canonicalc::on_btnHistory_clicked()
     }
 }
 
-void Canonicalc::on_fixedHistoryClear_clicked() { clearHistory(); }
-
-void Canonicalc::on_historyClear_clicked() { clearHistory(); }
-
 void Canonicalc::saveHistory()
 {
     ui->historyBrowser->setHtml("<div style=\"text-align:right; margin-bottom: 100px;\">"
@@ -513,10 +454,212 @@ void Canonicalc::saveHistory()
         latestHistory + "</p><p style=\"font-size: 18pt; font-weight: 700; color:#fafaf6;\">" +
         QString::number(result) + "</p></div><br><br>" + ui->historyBrowser->toHtml());
     ui->fixedHistoryBrowser->setHtml(ui->historyBrowser->toHtml());
+    ui->historyClear->setEnabled(true);
+    ui->fixedHistoryClear->setEnabled(true);
 }
 
 void Canonicalc::clearHistory()
 {
     ui->historyBrowser->clear();
     ui->fixedHistoryBrowser->clear();
+    ui->historyClear->setEnabled(false);
+    ui->fixedHistoryClear->setEnabled(false);
 }
+
+void Canonicalc::on_fixedHistoryClear_clicked()
+{
+    clearHistory();
+}
+
+void Canonicalc::on_historyClear_clicked()
+{
+    clearHistory();
+}
+
+
+
+//Overrided function, handles keyboard events.
+void Canonicalc::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+        case Qt::Key::Key_0: { appendValue(0); break; }
+        case Qt::Key::Key_1: { appendValue(1); break; }
+        case Qt::Key::Key_2: { appendValue(2); break; }
+        case Qt::Key::Key_3: { appendValue(3); break; }
+        case Qt::Key::Key_4: { appendValue(4); break; }
+        case Qt::Key::Key_5: { appendValue(5); break; }
+        case Qt::Key::Key_6: { appendValue(6); break; }
+        case Qt::Key::Key_7: { appendValue(7); break; }
+        case Qt::Key::Key_8: { appendValue(8); break; }
+        case Qt::Key::Key_9: { appendValue(9); break; }
+        case Qt::Key::Key_Backspace: {
+            if (equalPressed) { clear(); equalPressed = false; };
+            QString newValue = ui->display->text();
+            newValue.chop(1);
+            ui->display->setText(newValue);
+            currentValue = newValue.toDouble();
+            break;
+        }
+        case Qt::Key::Key_Plus: {
+            if (equalPressed) { clear(0); equalPressed = false; };
+
+            if (valueChanged) { //Second value
+                calculate();
+                currentOperation = Operation::Add;
+                refresh(currentValue);
+                awaitingInput = true;
+                valueChanged = false;
+            }
+            else {
+                previousValue = ui->display->text().toDouble();
+                currentValue = NULL;
+                awaitingInput = true;
+                currentOperation = Operation::Add;
+                refresh(previousValue);
+            }
+            break;
+        }
+        case Qt::Key::Key_Minus: {
+            if (equalPressed) { clear(0); equalPressed = false; };
+
+            if (valueChanged) {
+                calculate();
+                currentOperation = Operation::Subtract;
+                refresh(currentValue);
+                awaitingInput = true;
+                valueChanged = false;
+            }
+            else {
+                previousValue = ui->display->text().toDouble();
+                currentValue = NULL;
+                awaitingInput = true;
+                currentOperation = Operation::Subtract;
+                refresh(previousValue);
+            }
+            break;
+        }
+        case Qt::Key::Key_Asterisk: {
+            if (equalPressed) { clear(0); equalPressed = false; };
+
+            if (valueChanged) {
+                calculate();
+                currentOperation = Operation::Multiply;
+                refresh(currentValue);
+                awaitingInput = true;
+                valueChanged = false;
+            }
+            else {
+                previousValue = ui->display->text().toDouble();
+                currentValue = NULL;
+                awaitingInput = true;
+                currentOperation = Operation::Multiply;
+                refresh(previousValue);
+            }
+            break;
+        }
+        case Qt::Key::Key_Slash: {
+            if (equalPressed) { clear(0); equalPressed = false; };
+
+            if (valueChanged) {
+                calculate();
+                currentOperation = Operation::Divide;
+                refresh(currentValue);
+                awaitingInput = true;
+                valueChanged = false;
+            }
+            else {
+                previousValue = ui->display->text().toDouble();
+                currentValue = NULL;
+                awaitingInput = true;
+                currentOperation = Operation::Divide;
+                refresh(previousValue);
+            }
+            break;
+        }
+        case Qt::Key::Key_Period: {
+            if (equalPressed) { clear(); equalPressed = false; };
+            //Checks if value contains ".", decimal symbol,
+            //  if doesn't appends "." to the end of display value.
+            if (!ui->display->text().contains(".")) {
+                ui->display->setText(ui->display->text() + ".");
+            }
+            break;
+        }
+        case Qt::Key::Key_Equal:
+        case Qt::Key::Key_Enter: {
+            if (equalPressed) {
+                QString newDisplayValue;
+
+                switch (previousOperation) {
+                case Operation::None:
+                    latestHistory = QString::number(result, 'g', 15);
+                    result = currentValue;
+                    ui->display->setText(QString::number(currentValue, 'g', 15));
+                    break;
+
+                case Operation::Divide:
+                    latestHistory = QString::number(result, 'g', 15);
+                    result /= currentValue;
+                    latestHistory += " / ";
+                    latestHistory += QString::number(currentValue, 'g', 15);
+                    newDisplayValue = QString::number(result, 'g', 15);
+                    ui->display->setText(newDisplayValue);
+                    break;
+
+                case Operation::Multiply:
+                    latestHistory = QString::number(result, 'g', 15);
+                    result *= currentValue;
+                    latestHistory += " * ";
+                    latestHistory += QString::number(currentValue, 'g', 15);
+                    newDisplayValue = QString::number(result, 'g', 15);
+                    ui->display->setText(newDisplayValue);
+                    break;
+
+                case Operation::Subtract:
+                    latestHistory = QString::number(result, 'g', 15);
+                    result -= currentValue;
+                    latestHistory += " - ";
+                    latestHistory += QString::number(currentValue, 'g', 15);
+                    newDisplayValue = QString::number(result, 'g', 15);
+                    ui->display->setText(newDisplayValue);
+                    break;
+
+                case Operation::Add:
+                    latestHistory = QString::number(result, 'g', 15);
+                    result += currentValue;
+                    latestHistory += " + ";
+                    latestHistory += QString::number(currentValue, 'g', 15);
+                    newDisplayValue = QString::number(result, 'g', 15);
+                    ui->display->setText(newDisplayValue);
+                    break;
+                }
+                latestHistory += " = ";
+                ui->latestCalculation->setText(latestHistory);
+                saveHistory();
+            }
+            else {
+                calculate();
+
+                if (!valueSaved) { //Save previous value to history if needed
+                    latestEntry = QString::number(currentValue, 'g', 15);
+                    latestHistory += latestEntry;
+                    valueSaved = true;
+                }
+
+                //if (latestHistory.endsWith(" ")) {
+                //    latestHistory.chop(3);
+                //} Probably useless?
+                latestHistory += " = ";
+
+                ui->latestCalculation->setText(latestHistory);
+                saveHistory();
+
+                equalPressed = true; //This is to allow repetitive operation.
+            }
+            break;
+        }
+    }
+}
+
+
+//Whoa, you went so deep...

@@ -49,7 +49,6 @@ private:
     void clear(bool clearDisplay = true);
     void refresh(double value);
     void calculate();
-    void calculate(double firstValue, double secondValue, Operation op);
 
     /* HISTORY */
     QString latestEntry;
