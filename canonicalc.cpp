@@ -96,6 +96,7 @@ void Canonicalc::backspace()
 **************************************/
 void Canonicalc::divide()
 {
+    isSqrt = false;
     if (equalPressed) { clear(0); equalPressed = false; };
 
     if (valueChanged) {
@@ -116,6 +117,7 @@ void Canonicalc::divide()
 
 void Canonicalc::multiply()
 {
+    isSqrt = false;
     if (equalPressed) { clear(0); equalPressed = false; };
 
     if (valueChanged) {
@@ -136,6 +138,7 @@ void Canonicalc::multiply()
 
 void Canonicalc::subtract()
 {
+    isSqrt = false;
     if (equalPressed) { clear(0); equalPressed = false; };
 
     if (valueChanged) {
@@ -156,6 +159,7 @@ void Canonicalc::subtract()
 
 void Canonicalc::add()
 {
+    isSqrt = false;
     if (equalPressed) { clear(0); equalPressed = false; };
 
     if (valueChanged) { //Second value
